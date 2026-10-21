@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SaloonBossX Acquisition</title>
+<meta name="description" content="Acquire SaloonBossX: a finished, offline-first salon management app for 38 countries, with brand, domain and licensing system. Offer window closes Friday 23 October 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<meta property="og:title" content="SaloonBossX is for sale">
+<meta property="og:description" content="A finished, offline-first salon management app for 38 countries. Code, brand, domain and licence system. 48-hour fixed-price window.">
+<meta property="og:image" content="https://saloonbossx.shop/og.jpg">
+<meta property="og:url" content="https://saloonbossx.shop/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.png">
+<style>
+/* Layout: a salon's front desk at night. Copper on warm black; a receipt printer
+   on the right that re-prints the same bill in every country; editorial Bodoni
+   headlines; thin copper rules like the edge of a shear blade. */
+:root { padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+  --bg: #0D0A08;
+  --panel: #16110D;
+  --panel-2: #1E1712;
+  --line: #3A2B20;
+  --fg: #F4EADF;
+  --muted: #B3A291;
+  --copper: #E59A52;
+  --copper-deep: #B9631F;
+  --paper: #FBF5EC;
+  --paper-ink: #22180F;
+  --ok: #7FC79B;
+  --warn: #F2B35B;
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #FAF4EC; --panel: #FFFFFF; --panel-2: #F3E8DB; --line: #E2CFBB;
+    --fg: #1F150D; --muted: #6E5A48; --copper: #A84F18; --copper-deep: #8A3F10;
+    --paper: #FFFFFF; --paper-ink: #22180F; --ok: #2E7D4F; --warn: #A86312; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #FAF4EC; --panel: #FFFFFF; --panel-2: #F3E8DB; --line: #E2CFBB;
+  --fg: #1F150D; --muted: #6E5A48; --copper: #A84F18; --copper-deep: #8A3F10;
+  --paper: #FFFFFF; --paper-ink: #22180F; --ok: #2E7D4F; --warn: #A86312; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--copper); }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.3rem, 5.4vw, 4.1rem); line-height: 1.04; }
+h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); line-height: 1.1; }
+h3 { font-size: 1.3rem; line-height: 1.25; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper); }
+.lede { color: var(--muted); font-size: 1.12rem; max-width: 60ch; }
+.num { font-variant-numeric: tabular-nums; }
+section { padding-block: clamp(56px, 8vw, 96px); border-top: 1px solid var(--line); }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); font-weight: 700; letter-spacing: 0.01em; }
+.brand img { width: 34px; height: 34px; object-fit: contain; }
+.brand b { color: var(--copper); }
+.clock { margin-left: auto; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
+.clock strong { color: var(--fg); font-weight: 500; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 var(--ok); animation: pulse 2s infinite; }
+.dot.closed { background: var(--warn); animation: none; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; text-decoration: none; border: 1.5px solid var(--copper); cursor: pointer; font-family: var(--body); transition: transform .15s ease, background .15s ease; }
+.btn.solid { background: var(--copper); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn:hover { transform: translateY(-1px); }
+.btn.sm { padding: 8px 14px; font-size: 0.85rem; }
+
+/* hero */
+.hero { border-top: 0; padding-block: clamp(40px, 6vw, 80px) clamp(48px, 7vw, 88px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.hero h1 em { font-style: italic; color: var(--copper); }
+.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.hero .meta { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 22px; font-size: 0.9rem; color: var(--muted); }
+.hero .meta span::before { content: "✂ "; color: var(--copper); }
+
+/* receipt printer */
+.printer { position: relative; }
+.slot { height: 14px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px 10px 4px 4px; margin: 0 6px; }
+.receipt { background: var(--paper); color: var(--paper-ink); font-family: var(--mono); font-size: 0.8rem; line-height: 1.55; padding: 20px 20px 26px; margin: -4px 22px 0; position: relative; box-shadow: 0 30px 60px -30px rgba(0,0,0,.55);
+  -webkit-mask: radial-gradient(circle 7px at 50% 100%, transparent 6.5px, #000 7px) bottom/16px 100% repeat-x, linear-gradient(#000,#000) top/100% calc(100% - 7px) no-repeat; mask: radial-gradient(circle 7px at 50% 100%, transparent 6.5px, #000 7px) bottom/16px 100% repeat-x, linear-gradient(#000,#000) top/100% calc(100% - 7px) no-repeat; }
+.receipt.printing { animation: feed .7s cubic-bezier(.2,.8,.2,1); }
+@keyframes feed { from { transform: translateY(-18px); clip-path: inset(0 0 100% 0); } to { transform: none; clip-path: inset(0 0 0 0); } }
+.receipt .c { text-align: center; }
+.receipt .h { font-weight: 500; font-size: 0.92rem; letter-spacing: .04em; }
+.receipt .row { display: flex; justify-content: space-between; gap: 12px; }
+.receipt hr { border: 0; border-top: 1px dashed #b9a893; margin: 9px 0; }
+.receipt .tot { font-weight: 500; font-size: 0.95rem; }
+.receipt .qr { width: 54px; height: 54px; margin: 8px auto 0; background:
+  conic-gradient(from 90deg at 30% 30%, var(--paper-ink) 25%, transparent 0) 0 0/18px 18px,
+  repeating-linear-gradient(45deg, var(--paper-ink) 0 3px, transparent 3px 6px); opacity: .85; border: 4px solid var(--paper); outline: 2px solid var(--paper-ink); }
+.flags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.flags button { background: var(--panel); border: 1px solid var(--line); color: var(--fg); border-radius: 999px; padding: 5px 10px; font-size: 0.8rem; cursor: pointer; font-family: var(--body); }
+.flags button[aria-pressed="true"] { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 18%, var(--panel)); }
+
+/* facts */
+.facts { padding-block: 0; border-top: 0; }
+.facts .wrap { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-block: 1px solid var(--line); }
+.fact { padding: 22px 14px; border-left: 1px solid var(--line); }
+.fact:first-child { border-left: 0; }
+.fact b { display: block; font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 500; color: var(--fg); line-height: 1.1; }
+.fact span { font-size: 0.82rem; color: var(--muted); }
+
+/* generic two-col */
+.split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.stack { display: grid; gap: 14px; }
+
+/* included list */
+.ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ledger li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.ledger li::before { content: "✓"; color: var(--copper); font-weight: 700; }
+.ledger strong { display: block; }
+.ledger small { color: var(--muted); font-size: 0.9rem; }
+
+/* features */
+.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; margin-top: 36px; }
+.feature { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--panel); }
+.feature:nth-child(3n) { border-right: 0; }
+.feature:nth-last-child(-n+3) { border-bottom: 0; }
+.feature h3 { font-size: 1.15rem; margin-bottom: 6px; }
+.feature p { color: var(--muted); font-size: 0.93rem; }
+.feature .tag { font-family: var(--mono); font-size: 0.7rem; color: var(--copper); letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 10px; }
+
+/* pricing explorer */
+.explorer { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: clamp(18px, 3vw, 28px); margin-top: 32px; }
+.explorer .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+select, input[type="text"], input[type="email"], textarea { font-family: var(--body); font-size: 1rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; max-width: 100%; }
+.toggle { display: inline-flex; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.toggle button { border: 0; background: transparent; color: var(--muted); padding: 8px 16px; border-radius: 999px; font-weight: 700; cursor: pointer; font-family: var(--body); }
+.toggle button[aria-pressed="true"] { background: var(--copper); color: var(--bg); }
+.plans { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.plan { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: var(--bg); }
+.plan.best { border-color: var(--copper); }
+.plan .pn { font-weight: 700; }
+.plan .pp { font-family: var(--display); font-size: 1.9rem; line-height: 1.15; margin-top: 6px; }
+.plan .pp small { font-family: var(--body); font-size: 0.85rem; color: var(--muted); }
+.plan .ps { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+.explorer .foot { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; font-size: 0.85rem; color: var(--muted); }
+
+/* projection */
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: 32px; align-items: stretch; }
+.calc .card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+.calc label { display: block; font-weight: 600; margin-bottom: 6px; }
+.calc input[type="range"] { width: 100%; accent-color: var(--copper); }
+.calc .out { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1; color: var(--copper); }
+.note { font-size: 0.82rem; color: var(--muted); }
+
+/* compare table */
+.tablewrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--line); border-radius: 16px; }
+table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--panel); }
+tr:last-child td { border-bottom: 0; }
+td.us { color: var(--fg); font-weight: 600; }
+
+/* deal */
+.deals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+.deal { border: 1px solid var(--line); border-radius: 22px; padding: 28px; background: var(--panel); display: flex; flex-direction: column; gap: 14px; }
+.deal.lead { border-color: var(--copper); background: linear-gradient(160deg, color-mix(in srgb, var(--copper) 14%, var(--panel)), var(--panel) 55%); }
+.deal .price { font-family: var(--display); font-size: clamp(2.6rem, 5vw, 3.4rem); line-height: 1; }
+.deal .was { font-size: 0.95rem; color: var(--muted); }
+.deal .was s { color: var(--muted); }
+.deal ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 6px; }
+.deal .btn { align-self: flex-start; margin-top: auto; }
+.deadline { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; padding: 18px 22px; border: 1px dashed var(--copper); border-radius: 16px; }
+.deadline .cd { font-family: var(--mono); font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: .04em; }
+
+/* offer */
+.offer { display: grid; gap: 14px; margin-top: 26px; }
+.offer .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.offer label { font-weight: 600; font-size: 0.9rem; display: grid; gap: 6px; }
+.offer textarea { min-height: 120px; resize: vertical; }
+.msgbox { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; font-family: var(--mono); font-size: 0.82rem; white-space: pre-wrap; word-break: break-word; }
+.contact { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 12px; font-size: 0.95rem; }
+.contact code { font-family: var(--mono); background: var(--panel); border: 1px solid var(--line); padding: 2px 8px; border-radius: 6px; user-select: all; }
+
+/* faq */
+details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+details summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+details summary::after { content: "+"; color: var(--copper); font-family: var(--mono); }
+details[open] summary::after { content: "–"; }
+details p { color: var(--muted); margin-top: 10px; max-width: 70ch; }
+
+footer { border-top: 1px solid var(--line); padding-block: 32px 48px; color: var(--muted); font-size: 0.85rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
+
+@media (max-width: 900px) {
+  .hero .wrap, .split, .calc { grid-template-columns: minmax(0, 1fr); }
+  .facts .wrap { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fact:nth-child(4) { border-left: 0; }
+  .fact:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .feature:nth-child(3n) { border-right: 1px solid var(--line); }
+  .feature:nth-child(2n) { border-right: 0; }
+  .feature:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
+  .feature:nth-last-child(-n+2) { border-bottom: 0; }
+  .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .deals { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .facts .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fact { border-left: 0 !important; border-bottom: 1px solid var(--line); }
+  .fact:nth-child(odd) { border-right: 1px solid var(--line); }
+  .features { grid-template-columns: minmax(0, 1fr); }
+  .feature { border-right: 0 !important; border-bottom: 1px solid var(--line) !important; }
+  .feature:last-child { border-bottom: 0 !important; }
+  .offer .two { grid-template-columns: minmax(0, 1fr); }
+  .clock .lbl { display: none; }
+  .bar .btn { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<header class="bar" role="banner">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="data:image/webp;base64,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" alt=""><span>Saloon<b>BossX</b></span></a>
+    <div class="clock" aria-live="polite"><span class="dot" id="dot"></span><span class="lbl" id="clockLbl">Offer window closes in</span> <strong class="num" id="clockTop">48:00:00</strong></div>
+    <a class="btn solid sm" href="#offer">Make an offer</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">For sale · whole business · exclusive</p>
+        <h1 style="margin-top:14px">A finished salon software business, <em>ready for 38 countries.</em></h1>
+        <p class="lede" style="margin-top:20px">SaloonBossX is an offline-first Android app that runs a salon, spa or barbershop: billing in ten seconds, clients, staff and payroll, online booking, tax invoices and an on-device AI assistant. It now speaks each country's currency, tax and phone format, and sells as a premium monthly or yearly subscription. The code, brand, domain and licence-key system transfer to one buyer.</p>
+        <div class="ctas">
+          <a class="btn solid" href="#offer">Make an offer</a>
+          <a class="btn ghost" href="#included">See what you get</a>
+        </div>
+        <div class="meta"><span>React Native · Expo 57</span><span>Encrypted on-device data</span><span>saloonbossx.shop included</span></div>
+      </div>
+      <div class="printer" aria-label="Sample bill in the selected country">
+        <div class="slot"></div>
+        <div class="receipt" id="receipt"></div>
+        <div class="flags" id="flags" role="group" aria-label="Print the bill for"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="facts">
+    <div class="wrap">
+      <div class="fact"><b class="num">34,408</b><span>lines of TypeScript</span></div>
+      <div class="fact"><b class="num">44</b><span>app screens</span></div>
+      <div class="fact"><b class="num">109</b><span>automated tests, all passing</span></div>
+      <div class="fact"><b class="num">38</b><span>countries built in, US$ elsewhere</span></div>
+      <div class="fact"><b class="num">32</b><span>currencies with price lists</span></div>
+      <div class="fact"><b class="num">11</b><span>languages</span></div>
+    </div>
+  </div>
+
+  <section id="included">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">What transfers to you</p>
+        <h2>Everything needed to launch under your name next week.</h2>
+        <p class="lede">No subscriptions to migrate, no servers to take over. The app keeps each salon's data on its own phone, and the optional cloud runs on a free Google Apps Script you deploy once.</p>
+      </div>
+      <ul class="ledger">
+        <li><div><strong>Full source code, version 6.0 "Global"</strong><small>React Native + Expo app, booking website, Cloud Bridge script, build and release tools, 109 tests.</small></div></li>
+        <li><div><strong>Signed licence-key system</strong><small>Ed25519 keys: the app verifies, only you can issue. Monthly, yearly and trial keys, device limits, revocation sheet.</small></div></li>
+        <li><div><strong>Brand and domain</strong><small>SaloonBossX name, copper logo set, Play Store icon and feature graphic, and saloonbossx.shop.</small></div></li>
+        <li><div><strong>Price book for 32 currencies</strong><small>Solo, Salon Pro, Salon + Academy and Chain plans, monthly and yearly, in one editable table.</small></div></li>
+        <li><div><strong>Launch and sales playbooks</strong><small>Step-by-step setup, launch guide, licensing guide, multi-branch and booking-site guides, market review.</small></div></li>
+        <li><div><strong>Handover from the founder</strong><small>Build, publish and first licence keys done together on a call (see the two deal options).</small></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="product">
+    <div class="wrap">
+      <p class="eyebrow">The product</p>
+      <h2 style="margin-top:10px;max-width:22ch">Built for the counter, where the owner stands all day.</h2>
+      <div class="features">
+        <div class="feature"><span class="tag">Billing</span><h3>A bill in ten seconds</h3><p>Quick-add services, split payments, wallet and packages, pay-later dues, WhatsApp and PDF receipts, 58/80 mm thermal printing.</p></div>
+        <div class="feature"><span class="tag">Tax</span><h3>Local tax invoices</h3><p>GST with CGST/SGST in India; VAT, Sales tax, IVA, MwSt, TVA and more elsewhere, with tax-inclusive pricing and credit notes.</p></div>
+        <div class="feature"><span class="tag">Boss AI</span><h3>An assistant that works offline</h3><p>Morning briefing, forecast, who is due back, upsell hints, and a guard that flags staff with unusual discounts or cancellations.</p></div>
+        <div class="feature"><span class="tag">Bookings</span><h3>Online booking page</h3><p>A short link and QR poster per salon. Customers request a slot; the owner accepts in one tap and the customer gets WhatsApp confirmation.</p></div>
+        <div class="feature"><span class="tag">Team</span><h3>Staff, PINs and payroll</h3><p>Roles and permissions, attendance rules, commission, pay slips, and a "My work" screen for each stylist.</p></div>
+        <div class="feature"><span class="tag">Growth</span><h3>Branches and marketing</h3><p>HQ dashboard across branches, encrypted daily backup, win-back campaigns, Google review requests, poster studio, academy module.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack">
+          <p class="eyebrow">Revenue model, already wired in</p>
+          <h2>Premium subscriptions, priced for each country.</h2>
+        </div>
+        <p class="lede">The activation screen shows the plans in the salon's own currency and sends the buyer to your checkout with plan, currency and country attached. Yearly costs ten months, so most owners pay upfront.</p>
+      </div>
+      <div class="explorer">
+        <div class="controls">
+          <label for="country" class="eyebrow" style="display:grid;gap:8px">Salon in
+            <select id="country"></select>
+          </label>
+          <div class="toggle" role="group" aria-label="Billing period">
+            <button type="button" id="bMonthly" aria-pressed="false">Monthly</button>
+            <button type="button" id="bYearly" aria-pressed="true">Yearly · 2 months free</button>
+          </div>
+        </div>
+        <div class="plans" id="plans"></div>
+        <div class="foot" id="regionFoot"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="market">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack">
+          <p class="eyebrow">Market</p>
+          <h2>A <span class="num">$1.36B</span> category growing about 10% a year.</h2>
+          <p class="lede">Salon management software is estimated at $1.36 billion in 2026, heading to $1.97 billion by 2030. US leaders charge $28 to $168 a month and assume constant internet and card terminals. SaloonBossX targets the salons they underserve: offline-first, WhatsApp-native, local wallets, local languages.</p>
+          <p class="note">Market figures: The Business Research Company, Salon Management Software Global Market Report. Competitor prices: Costbench, 2026.</p>
+        </div>
+        <div class="calc" style="grid-template-columns:minmax(0,1fr);margin-top:0">
+          <div class="card">
+            <p class="eyebrow">What a buyer could build · illustration only</p>
+            <div style="display:grid;gap:18px;margin-top:16px">
+              <div><label for="salons">Paying salons: <span class="num" id="salonsOut">300</span></label><input id="salons" type="range" min="50" max="3000" step="50" value="300"></div>
+              <div><label for="mix">Average plan: <span id="mixOut">Salon Pro, yearly ($390)</span></label>
+                <select id="mix" style="width:100%">
+                  <option value="190">Solo, yearly ($190)</option>
+                  <option value="390" selected>Salon Pro, yearly ($390)</option>
+                  <option value="590">Salon + Academy, yearly ($590)</option>
+                  <option value="990">Chain, yearly ($990)</option>
+                  <option value="120">Emerging-market mix (~$120)</option>
+                </select>
+              </div>
+              <div><p class="note">Annual recurring revenue</p><p class="out num" id="arr">$117,000</p></div>
+              <p class="note">A projection from the price list, not current revenue. Current installs, customers and any revenue are shared with serious buyers on a call.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tablewrap" role="region" aria-label="Comparison" tabindex="0">
+        <table>
+          <thead><tr><th>What a salon gets</th><th>SaloonBossX</th><th>Typical US salon apps</th><th>Paper diary</th></tr></thead>
+          <tbody>
+            <tr><td>Price</td><td class="us">$19–$99 a month, or yearly with 2 months free</td><td>$28–$168 a month</td><td>Free</td></tr>
+            <tr><td>Works with no internet</td><td class="us">Yes, fully</td><td>Usually needs internet</td><td>Yes</td></tr>
+            <tr><td>Where the data lives</td><td class="us">The salon's phone, encrypted, plus encrypted backup</td><td>Vendor's servers</td><td>The book</td></tr>
+            <tr><td>Local tax invoice and QR wallet</td><td class="us">38 countries built in</td><td>Mostly US/UK/EU</td><td>No</td></tr>
+            <tr><td>Receipts and reminders on WhatsApp</td><td class="us">Yes</td><td>SMS or email</td><td>No</td></tr>
+            <tr><td>Staff misuse alerts</td><td class="us">Yes, Boss AI</td><td>Rarely</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="deal">
+    <div class="wrap">
+      <p class="eyebrow">Two ways to buy · one buyer only</p>
+      <h2 style="margin-top:10px;max-width:24ch">Fixed prices for the next 48 hours.</h2>
+      <p class="lede" style="margin-top:14px">The first buyer to accept a price below, or make an offer the founder accepts, takes everything exclusively. If no deal closes in the window, the business is listed on public marketplaces at <span class="num">$19,900</span>.</p>
+      <div class="deals">
+        <article class="deal lead">
+          <p class="eyebrow">Turnkey acquisition</p>
+          <div><p class="price num">$14,900</p><p class="was">Marketplace price after the window: <s class="num">$19,900</s></p></div>
+          <ul>
+            <li>Full source code, brand, logo set and saloonbossx.shop</li>
+            <li>Licence signing keys handed over, old keys revoked if you want</li>
+            <li>We build and publish your first release together on a call</li>
+            <li>Cloud Bridge and booking site deployed on your accounts</li>
+            <li>30 days of founder support on WhatsApp and calls</li>
+          </ul>
+          <a class="btn solid" href="#offer" data-deal="Turnkey acquisition, $14,900">Take the turnkey deal</a>
+        </article>
+        <article class="deal">
+          <p class="eyebrow">Code and brand</p>
+          <div><p class="price num">$8,900</p><p class="was">For teams that ship on their own</p></div>
+          <ul>
+            <li>Full source code, brand, logo set and saloonbossx.shop</li>
+            <li>Licence signing keys handed over</li>
+            <li>All guides and playbooks</li>
+            <li>7 days of founder support by message</li>
+          </ul>
+          <a class="btn ghost" href="#offer" data-deal="Code and brand, $8,900">Take code and brand</a>
+        </article>
+      </div>
+      <div class="deadline">
+        <div><p class="eyebrow">Window closes</p><p id="deadlineText">Friday 23 October 2026, 11:00 IST</p></div>
+        <div class="cd num" id="clockBig" aria-live="polite">48:00:00</div>
+        <p class="note" style="flex:1;min-width:220px">Payment through escrow (Escrow.com or a marketplace escrow) and transfer of code, domain and keys the same day funds are held.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="offer">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Make an offer</p>
+        <h2>Tell the founder what you want to do with it.</h2>
+        <p class="lede">Fill this in and send it by email or WhatsApp. You get a reply the same day, a live demo on a phone, and read access to the code under NDA.</p>
+        <div class="contact">
+          <span>Email <code id="emailText"></code></span>
+          <span id="waWrap">WhatsApp <code id="waText"></code></span>
+        </div>
+      </div>
+      <form class="offer" id="offerForm" novalidate>
+        <div class="two">
+          <label for="oName">Your name<input id="oName" type="text" autocomplete="name" placeholder="Priya Shah"></label>
+          <label for="oCompany">Company<input id="oCompany" type="text" autocomplete="organization" placeholder="Glow Software LLC"></label>
+        </div>
+        <div class="two">
+          <label for="oDeal">Deal
+            <select id="oDeal">
+              <option>Turnkey acquisition, $14,900</option>
+              <option>Code and brand, $8,900</option>
+              <option>My own offer</option>
+            </select>
+          </label>
+          <label for="oAmount">Your offer (US$)<input id="oAmount" type="text" inputmode="numeric" placeholder="14,900"></label>
+        </div>
+        <label for="oPlan">What will you do with it?<textarea id="oPlan" placeholder="We sell POS software to 400 salons in the UAE and want a mobile product…"></textarea></label>
+        <div class="msgbox" id="msg" aria-live="polite"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn solid" type="submit" id="copyBtn">Copy message</button>
+          <a class="btn ghost" id="mailBtn" href="#" target="_blank" rel="noopener">Open in email</a>
+          <a class="btn ghost" id="waBtn" href="#" target="_blank" rel="noopener">Open in WhatsApp</a>
+        </div>
+        <p class="note" id="copyNote"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Buyer questions</p>
+        <h2>Before you send an offer.</h2>
+      </div>
+      <div>
+        <details><summary>Does the app need a server I have to run?</summary><p>No. Each salon's data lives in an encrypted database on its phone. Backup, branches and online booking use one Google Apps Script that you deploy once in your own Google account, at no hosting cost.</p></details>
+        <details><summary>How do I get paid by salons?</summary><p>The activation screen sends the owner to your checkout link (Stripe, Razorpay, Paddle, Lemon Squeezy or any page) with plan, billing period, currency, country and device ID. You issue a signed key from the command line or in batches for a Google Sheet. In India, owners can also pay by UPI from the phone.</p></details>
+        <details><summary>What traction does it have?</summary><p>The founder shares current installs, customers and any revenue on a call, with screenshots from the licence sheet and Play Console. The price on this page is for the finished product, brand and system.</p></details>
+        <details><summary>Is it ready for the Play Store and the App Store?</summary><p>Android builds (AAB for Play, APK for direct sale) are scripted with EAS. An iOS build profile is included; publishing on iOS needs your Apple developer account and a test pass on iPhone.</p></details>
+        <details><summary>Can I rebrand it?</summary><p>Yes. Name, colours and logo come from one theme file and one brand folder; a script regenerates every icon and splash image from a new logo.</p></details>
+        <details><summary>How does the transfer work?</summary><p>Funds go into escrow. The founder then transfers the code repository, the domain, the licence signing keys and the brand files, and runs the handover calls. Escrow releases when you confirm you have everything.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>SaloonBossX · saloonbossx.shop</span>
+    <span>Figures on this page come from the codebase, except where a source is named.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ── Settings the seller edits ────────────────────────────────────────────
+  var CONFIG = {
+    deadline: "2026-10-23T11:00:00+05:30",     // offer window end
+    deadlineLabel: "Friday 23 October 2026, 11:00 IST",
+    email: "hello@saloonbossx.shop",
+    whatsapp: ""                               // digits with country code, e.g. 919800000000
+  };
+  var DATA = {"regions":[{"c":"IN","n":"India","f":"🇮🇳","cur":"INR","s":"₹","l":"en-IN","t":"GST","tr":5,"p":"UPI","split":true,"lp":300},{"c":"US","n":"United States","f":"🇺🇸","cur":"USD","s":"$","l":"en-US","t":"Sales tax","tr":6,"p":"Digital","split":false,"lp":30},{"c":"GB","n":"United Kingdom","f":"🇬🇧","cur":"GBP","s":"£","l":"en-GB","t":"VAT","tr":20,"p":"Pay link","split":false,"lp":24},{"c":"CA","n":"Canada","f":"🇨🇦","cur":"CAD","s":"C$","l":"en-CA","t":"GST/HST","tr":5,"p":"Interac","split":false,"lp":39},{"c":"AU","n":"Australia","f":"🇦🇺","cur":"AUD","s":"A$","l":"en-AU","t":"GST","tr":10,"p":"PayID","split":false,"lp":45},{"c":"NZ","n":"New Zealand","f":"🇳🇿","cur":"NZD","s":"NZ$","l":"en-NZ","t":"GST","tr":15,"p":"Pay link","split":false,"lp":48},{"c":"IE","n":"Ireland","f":"🇮🇪","cur":"EUR","s":"€","l":"en-IE","t":"VAT","tr":13.5,"p":"Pay link","split":false,"lp":26},{"c":"DE","n":"Germany","f":"🇩🇪","cur":"EUR","s":"€","l":"de-DE","t":"MwSt","tr":19,"p":"PayPal","split":false,"lp":26},{"c":"FR","n":"France","f":"🇫🇷","cur":"EUR","s":"€","l":"fr-FR","t":"TVA","tr":20,"p":"Lien de paiement","split":false,"lp":26},{"c":"ES","n":"Spain","f":"🇪🇸","cur":"EUR","s":"€","l":"es-ES","t":"IVA","tr":21,"p":"Bizum","split":false,"lp":26},{"c":"IT","n":"Italy","f":"🇮🇹","cur":"EUR","s":"€","l":"it-IT","t":"IVA","tr":22,"p":"Satispay / link","split":false,"lp":26},{"c":"NL","n":"Netherlands","f":"🇳🇱","cur":"EUR","s":"€","l":"nl-NL","t":"BTW","tr":21,"p":"Tikkie","split":false,"lp":26},{"c":"PT","n":"Portugal","f":"🇵🇹","cur":"EUR","s":"€","l":"pt-PT","t":"IVA","tr":23,"p":"MB WAY","split":false,"lp":26},{"c":"AE","n":"United Arab Emirates","f":"🇦🇪","cur":"AED","s":"AED ","l":"en-AE","t":"VAT","tr":5,"p":"Pay link","split":false,"lp":90},{"c":"SA","n":"Saudi Arabia","f":"🇸🇦","cur":"SAR","s":"SAR ","l":"en-SA","t":"VAT","tr":15,"p":"STC Pay / link","split":false,"lp":90},{"c":"QA","n":"Qatar","f":"🇶🇦","cur":"QAR","s":"QAR ","l":"en-QA","t":"Tax","tr":5,"p":"Pay link","split":false,"lp":90},{"c":"KW","n":"Kuwait","f":"🇰🇼","cur":"KWD","s":"KD ","l":"en-KW","t":"Tax","tr":5,"p":"Pay link","split":false,"lp":7.5},{"c":"OM","n":"Oman","f":"🇴🇲","cur":"OMR","s":"OMR ","l":"en-OM","t":"VAT","tr":5,"p":"Pay link","split":false,"lp":9},{"c":"BH","n":"Bahrain","f":"🇧🇭","cur":"BHD","s":"BD ","l":"en-BH","t":"VAT","tr":10,"p":"BenefitPay","split":false,"lp":9},{"c":"SG","n":"Singapore","f":"🇸🇬","cur":"SGD","s":"S$","l":"en-SG","t":"GST","tr":9,"p":"PayNow","split":false,"lp":36},{"c":"MY","n":"Malaysia","f":"🇲🇾","cur":"MYR","s":"RM","l":"en-MY","t":"SST","tr":8,"p":"DuitNow","split":false,"lp":60},{"c":"ID","n":"Indonesia","f":"🇮🇩","cur":"IDR","s":"Rp","l":"id-ID","t":"PPN","tr":11,"p":"QRIS","split":false,"lp":36000},{"c":"PH","n":"Philippines","f":"🇵🇭","cur":"PHP","s":"₱","l":"en-PH","t":"VAT","tr":12,"p":"GCash","split":false,"lp":750},{"c":"TH","n":"Thailand","f":"🇹🇭","cur":"THB","s":"฿","l":"th-TH","t":"VAT","tr":7,"p":"PromptPay","split":false,"lp":750},{"c":"PK","n":"Pakistan","f":"🇵🇰","cur":"PKR","s":"Rs ","l":"en-PK","t":"Sales tax","tr":16,"p":"JazzCash","split":false,"lp":750},{"c":"BD","n":"Bangladesh","f":"🇧🇩","cur":"BDT","s":"৳","l":"en-BD","t":"VAT","tr":15,"p":"bKash","split":false,"lp":300},{"c":"LK","n":"Sri Lanka","f":"🇱🇰","cur":"LKR","s":"Rs ","l":"en-LK","t":"VAT","tr":18,"p":"LankaQR","split":false,"lp":750},{"c":"NP","n":"Nepal","f":"🇳🇵","cur":"NPR","s":"Rs ","l":"en-NP","t":"VAT","tr":13,"p":"eSewa / Khalti","split":false,"lp":420},{"c":"NG","n":"Nigeria","f":"🇳🇬","cur":"NGN","s":"₦","l":"en-NG","t":"VAT","tr":7.5,"p":"Transfer","split":false,"lp":4500},{"c":"KE","n":"Kenya","f":"🇰🇪","cur":"KES","s":"KSh ","l":"en-KE","t":"VAT","tr":16,"p":"M-Pesa","split":false,"lp":420},{"c":"GH","n":"Ghana","f":"🇬🇭","cur":"GHS","s":"GH₵","l":"en-GH","t":"VAT","tr":15,"p":"MoMo","split":false,"lp":45},{"c":"ZA","n":"South Africa","f":"🇿🇦","cur":"ZAR","s":"R","l":"en-ZA","t":"VAT","tr":15,"p":"SnapScan / link","split":false,"lp":270},{"c":"EG","n":"Egypt","f":"🇪🇬","cur":"EGP","s":"E£","l":"en-EG","t":"VAT","tr":14,"p":"InstaPay","split":false,"lp":600},{"c":"TR","n":"Türkiye","f":"🇹🇷","cur":"TRY","s":"₺","l":"tr-TR","t":"KDV","tr":20,"p":"Ödeme linki","split":false,"lp":750},{"c":"BR","n":"Brazil","f":"🇧🇷","cur":"BRL","s":"R$","l":"pt-BR","t":"ISS","tr":5,"p":"PIX","split":false,"lp":105},{"c":"MX","n":"Mexico","f":"🇲🇽","cur":"MXN","s":"MX$","l":"es-MX","t":"IVA","tr":16,"p":"Transferencia","split":false,"lp":360},{"c":"CO","n":"Colombia","f":"🇨🇴","cur":"COP","s":"COL$","l":"es-CO","t":"IVA","tr":19,"p":"Nequi","split":false,"lp":90000},{"c":"CL","n":"Chile","f":"🇨🇱","cur":"CLP","s":"CLP$","l":"es-CL","t":"IVA","tr":19,"p":"Transferencia","split":false,"lp":21000},{"c":"XX","n":"Other country (US$)","f":"🌍","cur":"USD","s":"$","l":"en-US","t":"Tax","tr":5,"p":"Digital","split":false,"lp":30}],"book":{"USD":{"solo":19,"standard":39,"multi":99,"academy":59},"GBP":{"solo":15,"standard":32,"multi":79,"academy":49},"EUR":{"solo":17,"standard":35,"multi":89,"academy":55},"CAD":{"solo":25,"standard":52,"multi":129,"academy":79},"AUD":{"solo":29,"standard":59,"multi":149,"academy":89},"NZD":{"solo":32,"standard":65,"multi":159,"academy":95},"AED":{"solo":69,"standard":139,"multi":349,"academy":219},"SAR":{"solo":69,"standard":139,"multi":349,"academy":219},"QAR":{"solo":69,"standard":139,"multi":349,"academy":219},"KWD":{"solo":5.9,"standard":11.9,"multi":29.9,"academy":17.9},"OMR":{"solo":7.5,"standard":14.9,"multi":37.9,"academy":22.9},"BHD":{"solo":7.5,"standard":14.9,"multi":37.9,"academy":22.9},"SGD":{"solo":25,"standard":52,"multi":129,"academy":79},"MYR":{"solo":59,"standard":119,"multi":299,"academy":179},"IDR":{"solo":149000,"standard":299000,"multi":749000,"academy":449000},"PHP":{"solo":699,"standard":1399,"multi":3499,"academy":2099},"THB":{"solo":499,"standard":999,"multi":2499,"academy":1499},"INR":{"solo":499,"standard":999,"multi":2499,"academy":1499},"PKR":{"solo":2499,"standard":4999,"multi":12499,"academy":7499},"BDT":{"solo":999,"standard":1999,"multi":4999,"academy":2999},"LKR":{"solo":2999,"standard":5999,"multi":14999,"academy":8999},"NPR":{"solo":999,"standard":1999,"multi":4999,"academy":2999},"NGN":{"solo":9999,"standard":19999,"multi":49999,"academy":29999},"KES":{"solo":1499,"standard":2999,"multi":7499,"academy":4499},"GHS":{"solo":149,"standard":299,"multi":749,"academy":449},"ZAR":{"solo":249,"standard":499,"multi":1299,"academy":749},"EGP":{"solo":499,"standard":999,"multi":2499,"academy":1499},"TRY":{"solo":599,"standard":1199,"multi":2999,"academy":1799},"BRL":{"solo":79,"standard":159,"multi":399,"academy":239},"MXN":{"solo":299,"standard":599,"multi":1499,"academy":899},"COP":{"solo":59000,"standard":119000,"multi":299000,"academy":179000},"CLP":{"solo":14900,"standard":29900,"multi":74900,"academy":44900}}};
+
+  // ── Countdown ────────────────────────────────────────────────────────────
+  var end = new Date(CONFIG.deadline).getTime();
+  var top = document.getElementById("clockTop"), big = document.getElementById("clockBig");
+  document.getElementById("deadlineText").textContent = CONFIG.deadlineLabel;
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function tick() {
+    var ms = end - Date.now();
+    if (ms <= 0) {
+      top.textContent = "closed"; big.textContent = "Window closed";
+      document.getElementById("clockLbl").textContent = "Fixed-price window";
+      document.getElementById("dot").classList.add("closed");
+      return;
+    }
+    var s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+    var t = pad(h) + ":" + pad(m) + ":" + pad(x);
+    top.textContent = t; big.textContent = t;
+    setTimeout(tick, 1000 - (Date.now() % 1000));
+  }
+  tick();
+
+  // ── Receipt printer ──────────────────────────────────────────────────────
+  var R = {}; DATA.regions.forEach(function (r) { R[r.c] = r; });
+  function money(n, r, whole) {
+    var opts = { minimumFractionDigits: 0, maximumFractionDigits: whole ? 0 : 2 };
+    var v; try { v = Number(n).toLocaleString(r.l, opts); } catch (e) { v = String(Math.round(n * 100) / 100); }
+    return r.s + v;
+  }
+  function nice(v) {
+    var a = Math.abs(v), step = a < 10 ? 0.5 : a < 100 ? 1 : a < 1000 ? 5 : a < 10000 ? 50 : a < 100000 ? 500 : 1000;
+    return Math.max(step, Math.round(a / step) * step);
+  }
+  var SHOW = ["IN", "GB", "US", "AE", "BR", "DE", "KE", "SG"];
+  var flags = document.getElementById("flags"), receipt = document.getElementById("receipt");
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function printFor(code) {
+    var r = R[code], f = r.lp / 300;
+    var cut = nice(300 * f), spa = nice(1200 * f), sub = cut + spa, rate = r.tr;
+    var tax = Math.round(sub * rate) / 100, total = sub + tax;
+    var taxRows = r.split
+      ? '<div class="row"><span>CGST ' + rate / 2 + '%</span><span>' + money(tax / 2, r) + '</span></div><div class="row"><span>SGST ' + rate / 2 + '%</span><span>' + money(tax / 2, r) + '</span></div>'
+      : '<div class="row"><span>' + esc(r.t) + ' ' + rate + '%</span><span>' + money(tax, r) + '</span></div>';
+    receipt.innerHTML =
+      '<div class="c h">GLOW STUDIO</div><div class="c">' + esc(r.n) + '</div><div class="c">' + (r.split ? 'TAX INVOICE' : 'INVOICE') + ' · #GS-0412</div><hr>' +
+      '<div class="row"><span>Haircut &amp; style</span><span>' + money(cut, r) + '</span></div>' +
+      '<div class="row"><span>Hair spa</span><span>' + money(spa, r) + '</span></div><hr>' +
+      '<div class="row"><span>Taxable</span><span>' + money(sub, r) + '</span></div>' + taxRows + '<hr>' +
+      '<div class="row tot"><span>TOTAL ' + esc(r.cur) + '</span><span>' + money(total, r) + '</span></div>' +
+      '<div class="c" style="margin-top:6px">Paid by ' + esc(r.p) + '</div><div class="qr" aria-hidden="true"></div>' +
+      '<div class="c" style="margin-top:8px">Sent on WhatsApp · thank you</div>';
+    receipt.classList.remove("printing"); void receipt.offsetWidth; receipt.classList.add("printing");
+    Array.prototype.forEach.call(flags.children, function (b) { b.setAttribute("aria-pressed", b.dataset.c === code ? "true" : "false"); });
+  }
+  SHOW.forEach(function (c) {
+    var b = document.createElement("button"); b.type = "button"; b.dataset.c = c;
+    b.textContent = R[c].f + " " + R[c].cur; b.setAttribute("aria-label", R[c].n);
+    b.addEventListener("click", function () { stop(); printFor(c); });
+    flags.appendChild(b);
+  });
+  var i = 0, timer = null;
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  printFor(SHOW[0]);
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    timer = setInterval(function () { i = (i + 1) % SHOW.length; printFor(SHOW[i]); }, 3200);
+  }
+
+  // ── Pricing explorer ─────────────────────────────────────────────────────
+  var sel = document.getElementById("country"), plansEl = document.getElementById("plans"), footEl = document.getElementById("regionFoot");
+  DATA.regions.forEach(function (r) { var o = document.createElement("option"); o.value = r.c; o.textContent = r.f + "  " + r.n; sel.appendChild(o); });
+  sel.value = "GB";
+  var yearly = true;
+  var PLANS = [["solo", "Solo", "1 person, 1 phone"], ["standard", "Salon Pro", "One salon with staff"], ["academy", "Salon + Academy", "Salon plus courses"], ["multi", "Chain", "3 branches, HQ view"]];
+  function renderPlans() {
+    var r = R[sel.value], book = DATA.book[r.cur] ? r : R.US, prices = DATA.book[book.cur];
+    plansEl.innerHTML = PLANS.map(function (p) {
+      var m = prices[p[0]], y = Math.round(m * 10 * 100) / 100;
+      var main = yearly ? money(y, book, Number.isInteger(y)) : money(m, book, Number.isInteger(m));
+      var sub = yearly ? money(Math.round(y / 12 * 100) / 100, book) + " a month, billed yearly" : money(m * 12, book, true) + " a year if paid monthly";
+      return '<div class="plan' + (p[0] === "standard" ? " best" : "") + '"><div class="pn">' + p[1] + '</div><div class="pp num">' + main + '<small>' + (yearly ? " /year" : " /month") + '</small></div><div class="ps">' + sub + '</div><div class="ps">' + p[2] + '</div></div>';
+    }).join("");
+    footEl.innerHTML = '<span>Currency: ' + esc(book.cur) + '</span><span>Tax on bills: ' + esc(r.t) + (r.split ? ' (CGST + SGST)' : '') + '</span><span>QR wallet: ' + esc(r.p) + '</span><span>A ₹300 Indian haircut is set as ' + money(r.lp, r, true) + ' on the starter menu</span>';
+  }
+  function setYearly(v) { yearly = v; document.getElementById("bYearly").setAttribute("aria-pressed", v); document.getElementById("bMonthly").setAttribute("aria-pressed", !v); renderPlans(); }
+  document.getElementById("bYearly").addEventListener("click", function () { setYearly(true); });
+  document.getElementById("bMonthly").addEventListener("click", function () { setYearly(false); });
+  sel.addEventListener("change", renderPlans);
+  renderPlans();
+
+  // ── ARR illustration ─────────────────────────────────────────────────────
+  var salons = document.getElementById("salons"), mix = document.getElementById("mix");
+  function arr() {
+    var n = Number(salons.value), p = Number(mix.value);
+    document.getElementById("salonsOut").textContent = n.toLocaleString("en-US");
+    document.getElementById("mixOut").textContent = mix.options[mix.selectedIndex].text;
+    document.getElementById("arr").textContent = "$" + (n * p).toLocaleString("en-US");
+  }
+  salons.addEventListener("input", arr); mix.addEventListener("change", arr); arr();
+
+  // ── Offer message ────────────────────────────────────────────────────────
+  var f = { name: "oName", company: "oCompany", deal: "oDeal", amount: "oAmount", plan: "oPlan" };
+  Object.keys(f).forEach(function (k) { f[k] = document.getElementById(f[k]); f[k].addEventListener("input", compose); f[k].addEventListener("change", compose); });
+  document.getElementById("emailText").textContent = CONFIG.email;
+  if (CONFIG.whatsapp) document.getElementById("waText").textContent = "+" + CONFIG.whatsapp; else document.getElementById("waWrap").hidden = true;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-deal]"), function (a) {
+    a.addEventListener("click", function () { f.deal.value = a.dataset.deal; compose(); });
+  });
+  function compose() {
+    var amt = f.amount.value.trim();
+    var text = "SaloonBossX acquisition — offer\n\n" +
+      "Name: " + (f.name.value.trim() || "—") + "\n" +
+      "Company: " + (f.company.value.trim() || "—") + "\n" +
+      "Deal: " + f.deal.value + "\n" +
+      "Offer: " + (amt ? "US$ " + amt : "as listed") + "\n\n" +
+      "Plan for the business:\n" + (f.plan.value.trim() || "—") + "\n\n" +
+      "Please send a demo time and the NDA.";
+    document.getElementById("msg").textContent = text;
+    document.getElementById("mailBtn").href = "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("SaloonBossX offer — " + f.deal.value) + "&body=" + encodeURIComponent(text);
+    var wa = document.getElementById("waBtn");
+    if (CONFIG.whatsapp) { wa.hidden = false; wa.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(text); } else wa.hidden = true;
+    return text;
+  }
+  compose();
+  document.getElementById("offerForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var text = compose(), note = document.getElementById("copyNote");
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById("msg"));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      note.textContent = "Message selected. Copy it and send it to " + CONFIG.email + ".";
+    };
+    try {
+      navigator.clipboard.writeText(text).then(function () { note.textContent = "Copied. Paste it into an email to " + CONFIG.email + (CONFIG.whatsapp ? " or a WhatsApp message." : "."); }, fallback);
+    } catch (err) { fallback(); }
+  });
+})();
+</script>
+
+</body>
+</html>
